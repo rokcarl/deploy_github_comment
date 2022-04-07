@@ -38,6 +38,7 @@ jobs:
             content: "rocket",
           });
     - name: Fail randomly
+      id: deployment
       run: |
         echo "running deployment, v6"
         exit $((RANDOM % 2))
@@ -62,4 +63,15 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
             body: 'Deployment failed! ❌',
+          });
+    - name: One global message
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const message = context.steps.deployment.outputs.status == 'failure' ? 'Deployment failed! ❌' : 'Deployment succeeded! ✅'
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: message,
           });
