@@ -39,7 +39,7 @@ jobs:
           });
     - name: Fail randomly
       run: |
-        echo "running deployment, v5"
+        echo "running deployment, v6"
         exit $((RANDOM % 2))
     - name: Message success
       if: ${{ success() }}
